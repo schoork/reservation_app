@@ -9,20 +9,25 @@
 import React from 'react'
 import {Button, View, Text, StyleSheet} from 'react-native' 
 import {createStackNavigator, createAppContainer} from 'react-navigation'
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+
+import ListPage from './components/ListPage';
+
+const client = new ApolloClient({
+  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
+})
+//const client = new ApolloClient({ networkInterface })
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home'
+    title: 'Reservations'
   }
   render() {
     return(
-      <View style={styles.container}>
-        <Text>Home Screen</Text>
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-      </View>
+      <ApolloProvider client={client}>
+        <ListPage />
+      </ApolloProvider>
     )
   }
 }
@@ -46,7 +51,7 @@ const AppNavigator = createStackNavigator(
     initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#f4511e',
+        backgroundColor: '#2F4F4F',
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
@@ -82,10 +87,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import ListPage from './components/ListPage';
 
-const client = new ApolloClient({
-  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
-})
-//const client = new ApolloClient({ networkInterface })
+
 
 export default class App extends React.Component {
   render() {
