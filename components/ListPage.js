@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  TouchableHighlight,
-  ListView,
-  Modal,
+  FlatList,
   StyleSheet,
   Text
 } from 'react-native';
@@ -44,11 +42,14 @@ class ListPage extends Component {
   renderList(dataArray) {
     return(
       <View style={styles.container}>
-        {dataArray.map(row => (
-          <Text key={row.id} style={styles.instructions}>
-            {row.name} {row.hotelName}
-          </Text>
-        ))}
+        <FlatList
+          data={dataArray}
+          renderItem={({item}) => 
+            <Text key={item.id} style={styles.instructions}>
+              {item.name} {item.hotelName}
+            </Text>
+          }
+        />
       </View>
     )
   }
