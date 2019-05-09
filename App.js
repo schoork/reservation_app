@@ -20,8 +20,17 @@ const client = new ApolloClient({
 //const client = new ApolloClient({ networkInterface })
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Reservations'
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: 'Reservations',
+      headerRight: (
+        <Button
+          onPress={() => navigation.navigate('Details')}
+          title="Info"
+          color="#fff"
+        />
+      ),
+    }
   }
   render() {
     return(
