@@ -66,12 +66,26 @@ class ListPage extends Component {
     />
   )
 
+  renderSeparator() {
+    return(
+      <View
+        style={{
+          height: 1,
+          width: '86%',
+          backgroundColor: '#CED0CE',
+          marginLeft: '7%',
+        }}
+      />
+    )
+  }
+
   renderList(dataArray) {
     return(
       <FlatList
         keyExtractor={this.keyExtractor}
         data={dataArray}
         renderItem={this.renderItem}
+        ItemSeparatorComponent={this.renderSeparator}
       />
     )
   }
