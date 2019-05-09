@@ -3,19 +3,22 @@ import {
   View,
   FlatList,
   StyleSheet,
-  Text
+  Text,
 } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
 const allReservationsQuery = gql`
   query {
-    reservations(orderBy: createdAt_DESC) {
-      id
-      name
-      hotelName
-      departureDate
-      arrivalDate
+    reservations(
+      where: {name_not: ""},
+      orderBy: createdAt_DESC) {
+        id
+        name
+        hotelName
+        departureDate
+        arrivalDate
     }
   }
 `
@@ -39,18 +42,23 @@ class ListPage extends Component {
     )
   }
 
+  keyExtractor = (item, index) => index.toString()
+
+  renderItem = ({item}) => (
+    <ListItem 
+      key={item.id}
+      title={item.name}
+      subtitle={item.hotelName}
+    />
+  )
+
   renderList(dataArray) {
     return(
-      <View style={styles.container}>
-        <FlatList
-          data={dataArray}
-          renderItem={({item}) => 
-            <Text key={item.id} style={styles.instructions}>
-              {item.name} {item.hotelName}
-            </Text>
-          }
-        />
-      </View>
+      <FlatList
+        keyExtractor={this.keyExtractor}
+        data={dataArray}
+        renderItem={this.renderItem}
+      />
     )
   }
 
