@@ -11,6 +11,9 @@ import {Button, View, Text, StyleSheet} from 'react-native'
 import {createStackNavigator, createAppContainer} from 'react-navigation'
 
 class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Home'
+  }
   render() {
     return(
       <View style={styles.container}>
@@ -40,7 +43,16 @@ const AppNavigator = createStackNavigator(
     Details: DetailsScreen
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#f4511e',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }
   }
 )
 
