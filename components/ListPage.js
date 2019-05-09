@@ -60,7 +60,8 @@ class ListPage extends Component {
       subtitle={`${item.arrivalDate} - ${item.departureDate}`}
       leftAvatar={{ 
         size: 50,
-        source: imageSources[Math.floor(Math.random() * imageSources.length)]
+        source: imageSources[item.hotelName.toUpperCase().includes('hilton'.toUpperCase()) === true ? 1 : 0]
+        //source: imageSources[Math.floor(Math.random() * imageSources.length)]
       }}
     />
   )
