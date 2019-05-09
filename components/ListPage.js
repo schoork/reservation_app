@@ -27,6 +27,11 @@ const allReservationsQuery = gql`
   }
 `
 
+var imageSources = [
+  require('../img/FRODO.jpg'),
+  require('../img/generic.png')
+];
+
 class ListPage extends Component {
   renderLoading() {
     return(
@@ -51,10 +56,11 @@ class ListPage extends Component {
   renderItem = ({item}) => (
     <ListItem 
       key={item.id}
-      title={item.name}
-      subtitle={item.hotelName}
+      title={`${item.name} staying at ${item.hotelName}`}
+      subtitle={`${item.arrivalDate} - ${item.departureDate}`}
       leftAvatar={{ 
-        source: { uri: 'https://firebasestorage.googleapis.com/v0/b/better-by-friends.appspot.com/o/FRODO.jpg?alt=media&token=ed29066d-e4e5-4291-acf8-dc97440e7a09' }
+        size: 50,
+        source: imageSources[Math.floor(Math.random() * imageSources.length)]
       }}
     />
   )
