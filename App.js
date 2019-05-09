@@ -7,7 +7,8 @@
  */
 
 import React from 'react'
-import {Button, View, Text, StyleSheet} from 'react-native' 
+import {View, Text, StyleSheet} from 'react-native' 
+import { Icon } from 'react-native-elements'
 import {createStackNavigator, createAppContainer} from 'react-navigation'
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
@@ -24,10 +25,11 @@ class HomeScreen extends React.Component {
     return {
       headerTitle: 'Reservations',
       headerRight: (
-        <Button
+        <Icon
           onPress={() => navigation.navigate('Details')}
-          title="Info"
-          color="#fff"
+          name='add'
+          type='material'
+          color='white'
         />
       ),
     }
