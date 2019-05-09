@@ -29,7 +29,9 @@ const allReservationsQuery = gql`
 
 var imageSources = [
   require('../img/stark.jpeg'),
-  require('../img/lannister.jpg')
+  require('../img/lannister.jpg'),
+  require('../img/dorne.png'),
+  require('../img/greyjoy.png')
 ];
 
 class ListPage extends Component {
@@ -60,8 +62,13 @@ class ListPage extends Component {
       subtitle={`${item.arrivalDate} - ${item.departureDate}`}
       leftAvatar={{ 
         size: 50,
-        source: imageSources[item.hotelName.toUpperCase().includes('hilton'.toUpperCase()) === true ? 1 : 0]
-        //source: imageSources[Math.floor(Math.random() * imageSources.length)]
+        source: item.hotelName.toUpperCase().includes('hilton'.toUpperCase()) === true
+          ? imageSources[1]
+          : item.hotelName.toUpperCase().includes('marriot'.toUpperCase()) === true
+            ? imageSources[2]
+            : item.hotelName.toUpperCase().includes('double'.toUpperCase()) === true
+              ? imageSources[3]
+              : imageSources[0]
       }}
     />
   )
