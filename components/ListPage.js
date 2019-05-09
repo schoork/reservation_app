@@ -28,8 +28,8 @@ const allReservationsQuery = gql`
 `
 
 var imageSources = [
-  require('../img/FRODO.jpg'),
-  require('../img/generic.png')
+  require('../img/stark.jpeg'),
+  require('../img/lannister.jpg')
 ];
 
 class ListPage extends Component {
