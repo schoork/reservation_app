@@ -5,7 +5,11 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { 
+  List, 
+  ListItem,
+  Avatar,
+} from 'react-native-elements';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
@@ -49,6 +53,9 @@ class ListPage extends Component {
       key={item.id}
       title={item.name}
       subtitle={item.hotelName}
+      leftAvatar={{ 
+        source: { uri: 'https://firebasestorage.googleapis.com/v0/b/better-by-friends.appspot.com/o/FRODO.jpg?alt=media&token=ed29066d-e4e5-4291-acf8-dc97440e7a09' }
+      }}
     />
   )
 
