@@ -6,6 +6,36 @@
  * @flow
  */
 
+import React from 'react'
+import {View, Text, StyleSheet} from 'react-native' 
+import {createStackNavigator, createAppContainer} from 'react-navigation'
+
+class HomeScreen extends React.Component {
+  render() {
+    return(
+      <View style={styles.container}>
+        <Text>Home Screen</Text>
+      </View>
+    )
+  }
+}
+
+const AppNavigator = createStackNavigator({
+  Home: {screen: HomeScreen}
+})
+
+export default createAppContainer(AppNavigator)
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+})
+
+ /*
 import React, {Component} from 'react';
 import {Platform, FlatList, StyleSheet, Text, View} from 'react-native';
 import ApolloClient from 'apollo-boost';
@@ -28,3 +58,4 @@ export default class App extends React.Component {
     );  
   }
 }
+*/
