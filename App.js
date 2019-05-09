@@ -7,7 +7,7 @@
  */
 
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native' 
+import {Button, View, Text, StyleSheet} from 'react-native' 
 import {createStackNavigator, createAppContainer} from 'react-navigation'
 
 class HomeScreen extends React.Component {
@@ -15,6 +15,10 @@ class HomeScreen extends React.Component {
     return(
       <View style={styles.container}>
         <Text>Home Screen</Text>
+        <Button
+          title="Go to Details"
+          onPress={() => this.props.navigation.navigate('Details')}
+        />
       </View>
     )
   }
