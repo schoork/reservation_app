@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, TextInput, StyleSheet, Text, DatePickerIOS, Keyboard, Modal, TouchableHighlight } from 'react-native'
-import { Button } from 'react-native-elements';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class AddReservationPage extends Component {
   constructor(props) {
@@ -38,6 +38,7 @@ class AddReservationPage extends Component {
           date={this.state.arrivalDate}
           onDateChange={this._setArrivalDate}
           mode={'date'}
+          style={styles.datePicker}
         />
       )
     }
@@ -54,6 +55,7 @@ class AddReservationPage extends Component {
           date={this.state.departureDate}
           onDateChange={this._setDepartureDate}
           mode={'date'}
+          style={styles.datePicker}
         />
       )
     }
@@ -117,20 +119,34 @@ class AddReservationPage extends Component {
           ref={(input) => {this.secondTextInput = input}}
           onFocus={this._hideDatePickers}
         />
-        <Text style={styles.singleLineTextInput} onPress={this._toggleArrivalDatePicker}>
-          {this.state.arrivalDate.toDateString()}
-        </Text>
+
+        <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleArrivalDatePicker}>
+          <Text>
+            Arrival
+          </Text>
+          <Text style={styles.datePickerText} >
+            {this.state.arrivalDate.toDateString()}
+          </Text>
+        </TouchableWithoutFeedback>
         {this._showArrivalDatePicker()}
-        <Text style={styles.singleLineTextInput} onPress={this._toggleDepartureDatePicker}>
-          {this.state.departureDate.toDateString()}
-        </Text>
+
+        <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleDepartureDatePicker}>
+          <Text>
+            Departure
+          </Text>
+          <Text style={styles.datePickerText}>
+            {this.state.departureDate.toDateString()}
+          </Text>
+        </TouchableWithoutFeedback>
         {this._showDepartureDatePicker()}
-        <Button
+
+        <TouchableHighlight
           onPress={this._submitReservation}
-          title="Complete Reservation"
-          color="2F4F4F"
-          style={styles.button}
-        />
+          style={styles.highlightStyles}>
+          <Text style={styles.button}>
+            Complete Reservation
+          </Text>
+        </TouchableHighlight>
 
         <Modal
           animationType={'slide'}
@@ -142,7 +158,7 @@ class AddReservationPage extends Component {
           <View style={{marginTop: 22}}>
             <View>
               <Text>
-                Tormund says:
+                Tyrion says:
               </Text>
 
               <TouchableHighlight
@@ -165,20 +181,53 @@ class AddReservationPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
-    backgroundColor: '#F5FCFF',
+    paddingTop: 50,
+    backgroundColor: '#2F4F4F',
   },
   singleLineTextInput: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    backgroundColor: '#F5FCFF',
     width: '84%',
     padding: 10,
     marginLeft: '8%',
+    marginTop: 5,
+    marginBottom: 5,
+    borderRadius: 25,
+  },
+  datePickerView: {
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5FCFF',
+    width: '84%',
+    marginLeft: '8%',
+    marginTop: 5,
+    marginBottom: 5,
+    borderRadius: 25,
+  },
+  datePickerText: {
+    
+  },
+  datePicker: {
+    width: '84%',
+    marginLeft: '8%',
+    backgroundColor: '#F5FCFF',
   },
   button: {
+    borderRadius: 25,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 18,
+    padding: 10,
+  },
+  highlightStyles: {
+    marginTop: 10,
+    alignItems: 'center',
+    backgroundColor: "#F5FCFF",
     width: '84%',
-    marginLeft: '8%'
+    marginLeft: '8%',
+    justifyContent: 'center',
+    borderRadius: 25,
   }
 })
 
