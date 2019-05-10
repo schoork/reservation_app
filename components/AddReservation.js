@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TextInput, StyleSheet, Text, DatePickerIOS } from 'react-native'
+import { View, TextInput, StyleSheet, Text, DatePickerIOS, Keyboard } from 'react-native'
 import { Button } from 'react-native-elements';
 
 class AddReservationPage extends Component {
@@ -14,6 +14,7 @@ class AddReservationPage extends Component {
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
     }
+    this._hideDatePickers = this._hideDatePickers.bind(this)
     // functions for Arrival Date Picker
     this._setArrivalDate = this._setArrivalDate.bind(this)
     this._toggleArrivalDatePicker = this._toggleArrivalDatePicker.bind(this)
@@ -57,6 +58,7 @@ class AddReservationPage extends Component {
   }
 
   _toggleArrivalDatePicker() {
+    Keyboard.dismiss()
     this.setState({
       showDepartureDatePicker: false,
       showArrivalDatePicker: !this.state.showArrivalDatePicker
@@ -64,9 +66,17 @@ class AddReservationPage extends Component {
   }
 
   _toggleDepartureDatePicker() {
+    Keyboard.dismiss()
     this.setState({
       showArrivalDatePicker: false,
       showDepartureDatePicker: !this.state.showDepartureDatePicker
+    })
+  }
+
+  _hideDatePickers() {
+    this.setState({
+      showArrivalDatePicker: false,
+      showDepartureDatePicker: false,
     })
   }
 
@@ -85,6 +95,7 @@ class AddReservationPage extends Component {
           autoCapitalize={'words'}
           returnKeyType={'next'}
           onSubmitEditing={() => { this.secondTextInput.focus() }}
+          onFocus={this._hideDatePickers}
         />
         <TextInput
           style={styles.singleLineTextInput}
@@ -94,6 +105,7 @@ class AddReservationPage extends Component {
           autoCapitalize={'words'}
           returnKeyType={'done'}
           ref={(input) => {this.secondTextInput = input}}
+          onFocus={this._hideDatePickers}
         />
         <Text style={styles.singleLineTextInput} onPress={this._toggleArrivalDatePicker}>
           {this.state.arrivalDate.toDateString()}
