@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TextInput, StyleSheet, Text, DatePickerIOS, Keyboard } from 'react-native'
+import { View, TextInput, StyleSheet, Text, DatePickerIOS, Keyboard, Modal, TouchableHighlight } from 'react-native'
 import { Button } from 'react-native-elements';
 
 class AddReservationPage extends Component {
@@ -13,8 +13,10 @@ class AddReservationPage extends Component {
       departureDate: tomorrow,
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
+      modalVisible: false,
     }
     this._hideDatePickers = this._hideDatePickers.bind(this)
+    this._submitReservation = this._submitReservation.bind(this)
     // functions for Arrival Date Picker
     this._setArrivalDate = this._setArrivalDate.bind(this)
     this._toggleArrivalDatePicker = this._toggleArrivalDatePicker.bind(this)
@@ -80,8 +82,16 @@ class AddReservationPage extends Component {
     })
   }
 
-  submitReservation() {
-    alert('submitting')
+  _submitReservation() {
+    this.setState({
+      modalVisible: true
+    })
+  }
+
+  _setModalVisible(visible) {
+    this.setState({
+      modalVisible: visible
+    })
   }
 
   render() {
@@ -116,11 +126,37 @@ class AddReservationPage extends Component {
         </Text>
         {this._showDepartureDatePicker()}
         <Button
-          onPress={this.submitReservation}
+          onPress={this._submitReservation}
           title="Complete Reservation"
           color="2F4F4F"
           style={styles.button}
         />
+
+        <Modal
+          animationType={'slide'}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() =>{
+            alert('modal closed')
+          }}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>
+                Tormund says:
+              </Text>
+
+              <TouchableHighlight
+                onPress={() => {
+                  this._setModalVisible(!this.state.modalVisible)
+                }}>
+                <Text>
+                  Hide
+                </Text>
+              </TouchableHighlight>
+
+            </View>
+          </View>
+        </Modal>
       </View>
     )
   }
