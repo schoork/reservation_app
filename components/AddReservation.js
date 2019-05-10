@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TextInput, StyleSheet, DatePickerIOS } from 'react-native'
+import { View, TextInput, StyleSheet, Text, DatePickerIOS } from 'react-native'
 
 class AddReservationPage extends Component {
   constructor(props) {
@@ -10,6 +10,8 @@ class AddReservationPage extends Component {
       showDatePicker: false,
     }
     this.setArrivalDate = this.setArrivalDate.bind(this)
+    this.showHideDatePicker = this.showHideDatePicker.bind(this)
+    this._showDatePicker = this._showDatePicker.bind(this)
   }
 
   setArrivalDate(newDate) {
@@ -33,6 +35,12 @@ class AddReservationPage extends Component {
     }
   }
 
+  showHideDatePicker() {
+    this.setState({
+      showDatePicker: !this.state.showDatePicker
+    })
+  }
+
   render() {
     return(
       <View style={styles.container}>
@@ -50,6 +58,9 @@ class AddReservationPage extends Component {
           onChangeText={(text) => this.setState({text})}
           autoCapitalize={'words'}
         />
+        <Text style={styles.singleLineTextInput} onPress={this.showHideDatePicker}>
+          {this.state.arrivalDate.toDateString()}
+        </Text>
         {this._showDatePicker()}
       </View>
     )
