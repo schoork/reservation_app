@@ -7,37 +7,60 @@ class AddReservationPage extends Component {
     this.state = {
       arrivalDate: new Date(),
       departureDate: new Date(),
-      showDatePicker: false,
+      showArrivalDatePicker: false,
+      showDepartureDatePicker: false,
     }
-    this.setArrivalDate = this.setArrivalDate.bind(this)
-    this.showHideDatePicker = this.showHideDatePicker.bind(this)
-    this._showDatePicker = this._showDatePicker.bind(this)
+    this._setArrivalDate = this._setArrivalDate.bind(this)
+    this._toggleArrivalDatePicker = this._toggleArrivalDatePicker.bind(this)
+    this._showArrivalDatePicker = this._showArrivalDatePicker.bind(this)
+    this._setDepartureDate = this._setDepartureDate.bind(this)
+    this._toggleDepartureDatePicker = this._toggleDepartureDatePicker.bind(this)
+    this._showDepartureDatePicker = this._showDepartureDatePicker.bind(this)
   }
 
-  setArrivalDate(newDate) {
+  _setArrivalDate(newDate) {
     this.setState({arrivalDate: newDate})
   }
 
-  setDepartureDate(newDate) {
-    this.setState({departureDate: newDate})
-  }
-
-  _showDatePicker() {
-    if (this.state.showDatePicker) {
+  _showArrivalDatePicker() {
+    if (this.state.showArrivalDatePicker) {
       return(
         <DatePickerIOS
           date={this.state.arrivalDate}
-          onDateChange={this.setArrivalDate}
+          onDateChange={this._setArrivalDate}
           mode={'date'}
-          isVisible={false}
         />
       )
     }
   }
 
-  showHideDatePicker() {
+  _setDepartureDate(newDate) {
+    this.setState({departureDate: newDate})
+  }
+  
+  _showDepartureDatePicker() {
+    if (this.state.showDepartureDatePicker) {
+      return(
+        <DatePickerIOS
+          date={this.state.departureDate}
+          onDateChange={this._setDepartureDate}
+          mode={'date'}
+        />
+      )
+    }
+  }
+
+  _toggleArrivalDatePicker() {
     this.setState({
-      showDatePicker: !this.state.showDatePicker
+      showDepartureDatePicker: false,
+      showArrivalDatePicker: !this.state.showArrivalDatePicker
+    })
+  }
+
+  _toggleDepartureDatePicker() {
+    this.setState({
+      showArrivalDatePicker: false,
+      showDepartureDatePicker: !this.state.showDepartureDatePicker
     })
   }
 
@@ -58,10 +81,14 @@ class AddReservationPage extends Component {
           onChangeText={(text) => this.setState({text})}
           autoCapitalize={'words'}
         />
-        <Text style={styles.singleLineTextInput} onPress={this.showHideDatePicker}>
+        <Text style={styles.singleLineTextInput} onPress={this._toggleArrivalDatePicker}>
           {this.state.arrivalDate.toDateString()}
         </Text>
-        {this._showDatePicker()}
+        {this._showArrivalDatePicker()}
+        <Text style={styles.singleLineTextInput} onPress={this._toggleDepartureDatePicker}>
+          {this.state.departureDate.toDateString()}
+        </Text>
+        {this._showDepartureDatePicker()}
       </View>
     )
   }
