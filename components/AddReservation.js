@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
 import { View, TextInput, StyleSheet, Text, DatePickerIOS } from 'react-native'
+import { Button } from 'react-native-elements';
 
 class AddReservationPage extends Component {
   constructor(props) {
     super(props)
+    today = new Date()
+    tomorrow = new Date()
+    tomorrow.setDate(today.getDate()+1)
     this.state = {
-      arrivalDate: new Date(),
-      departureDate: new Date(),
+      arrivalDate: today,
+      departureDate: tomorrow,
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
     }
+    // functions for Arrival Date Picker
     this._setArrivalDate = this._setArrivalDate.bind(this)
     this._toggleArrivalDatePicker = this._toggleArrivalDatePicker.bind(this)
     this._showArrivalDatePicker = this._showArrivalDatePicker.bind(this)
+    // functions for Departure Date Picker
     this._setDepartureDate = this._setDepartureDate.bind(this)
     this._toggleDepartureDatePicker = this._toggleDepartureDatePicker.bind(this)
     this._showDepartureDatePicker = this._showDepartureDatePicker.bind(this)
@@ -64,6 +70,10 @@ class AddReservationPage extends Component {
     })
   }
 
+  submitReservation() {
+    alert('submitting')
+  }
+
   render() {
     return(
       <View style={styles.container}>
@@ -73,6 +83,8 @@ class AddReservationPage extends Component {
           placeholder={'Name'}
           onChangeText={(text) => this.setState({text})}
           autoCapitalize={'words'}
+          returnKeyType={'next'}
+          onSubmitEditing={() => { this.secondTextInput.focus() }}
         />
         <TextInput
           style={styles.singleLineTextInput}
@@ -80,6 +92,8 @@ class AddReservationPage extends Component {
           placeholder={'Hotel'}
           onChangeText={(text) => this.setState({text})}
           autoCapitalize={'words'}
+          returnKeyType={'done'}
+          ref={(input) => {this.secondTextInput = input}}
         />
         <Text style={styles.singleLineTextInput} onPress={this._toggleArrivalDatePicker}>
           {this.state.arrivalDate.toDateString()}
@@ -89,6 +103,12 @@ class AddReservationPage extends Component {
           {this.state.departureDate.toDateString()}
         </Text>
         {this._showDepartureDatePicker()}
+        <Button
+          onPress={this.submitReservation}
+          title="Complete Reservation"
+          color="2F4F4F"
+          style={styles.button}
+        />
       </View>
     )
   }
@@ -97,7 +117,7 @@ class AddReservationPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    marginTop: 50,
     backgroundColor: '#F5FCFF',
   },
   singleLineTextInput: {
@@ -107,6 +127,10 @@ const styles = StyleSheet.create({
     width: '84%',
     padding: 10,
     marginLeft: '8%',
+  },
+  button: {
+    width: '84%',
+    marginLeft: '8%'
   }
 })
 

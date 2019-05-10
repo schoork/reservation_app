@@ -91,25 +91,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 })
-
- /*
-import React, {Component} from 'react';
-import {Platform, FlatList, StyleSheet, Text, View} from 'react-native';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
-
-
-import ListPage from './components/ListPage';
-
-
-
-export default class App extends React.Component {
-  render() {
-    return (
-      <ApolloProvider client={client}>
-        <ListPage />
-      </ApolloProvider>
-    );  
-  }
-}
-*/
