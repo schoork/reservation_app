@@ -38,7 +38,12 @@ class ListPage extends Component {
   renderLoading() {
     return(
       <View style={styles.container}>
-        <ActivityIndicator styleAttr='Large' />
+        <Image
+          source={require('../img/swords.png')}
+        />
+        <Text>
+          We are currently off fighting a war, so we can't load your data.
+        </Text>
       </View>
     )
   }
@@ -102,9 +107,10 @@ class ListPage extends Component {
       return this.renderLoading;
     } else if (this.props.allReservationsQuery && this.props.allReservationsQuery.error) {
       return this.renderError;
+    } else if (this.props.allReservationsQuery.networkError) {
+      return this.renderLoading
     } else {
       const reservationsList = this.props.allReservationsQuery.reservations
-      console.log(reservationsList)
       return this.renderList(reservationsList)
     }
   }

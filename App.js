@@ -14,6 +14,7 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
 import ListPage from './components/ListPage';
+import AddReservationPage from './components/AddReservation';
 
 const client = new ApolloClient({
   uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
@@ -26,7 +27,7 @@ class HomeScreen extends React.Component {
       headerTitle: 'Reservations',
       headerRight: (
         <Icon
-          onPress={() => navigation.navigate('Details')}
+          onPress={() => navigation.navigate('Add')}
           name='add'
           type='material'
           color='white'
@@ -43,12 +44,13 @@ class HomeScreen extends React.Component {
   }
 }
 
-class DetailsScreen extends React.Component {
+class AddScreen extends React.Component {
+  static navigationOptions = {
+    headerTitle: 'Add Reservation'
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Details Screen</Text>
-      </View>
+      <AddReservationPage />
     )
   }
 }
@@ -56,13 +58,14 @@ class DetailsScreen extends React.Component {
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
-    Details: DetailsScreen
+    Add: AddScreen
   },
   {
     initialRouteName: 'Home',
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: '#2F4F4F',
+        marginRight: 10,
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
