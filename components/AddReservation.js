@@ -24,6 +24,8 @@ class AddReservationPage extends Component {
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
       modalVisible: false,
+      firstMessage: firstMessages.stark,
+      secondMessage: secondMessages.stark,
     }
     this._hideDatePickers = this._hideDatePickers.bind(this)
     this._submitReservation = this._submitReservation.bind(this)
@@ -178,7 +180,7 @@ class AddReservationPage extends Component {
               </View>
 
               <Text style={styles.message}>
-                {firstMessages.stark}
+                {this.state.firstMessage}
               </Text>
 
               <Text style={styles.message}>
@@ -186,7 +188,7 @@ class AddReservationPage extends Component {
               </Text>
                 
               <Text style={styles.message}>
-                {secondMessages.stark}
+                {this.state.secondMessage}
               </Text>
 
               <View style={styles.modalButtonFlex}>
@@ -222,10 +224,16 @@ class AddReservationPage extends Component {
 
 const firstMessages = {
   stark: "The Starks are noble and just lords. They will give you a fair shake. But if you're the kind who would desert from the Wall, they will chop off your head.",
+  lannister: "My sister? You trust my sister. I did [SPOILER ALERT]. How can you trust her? She's the only one of us whose hair hasn't changed color.",
+  dorne: "I'm pretty sure we don't have air conditioning in Westeros yet, so be prepared to sweat in Dorne. It's so far away from my sister and all of the fighting that you'll probably be safe.",
+  greyjoy: "Double tree? Really?!? They are seriously going to cut that thing down to make some more ships in about two episodes.",
 }
 
 const secondMessages = {
   stark: "The Starks also tend to die a lot, and the Boltons are downright cruel. Are you sure you want to stay so far north? Winter is coming.",
+  lannister: "Who knows if she will die? Eh. Try somewhere else, wait a week or two on the Lannister lands. We always pay our debts.",
+  dorne: "Don't kiss anyone though. For a house whose words are 'Unbowed, Unbent, Unbroken', they sure do lose a lot.",
+  greyjoy: "The Greyjoys are the weirdest of the houses in Westeros. But apparently drowning isn't fatal. So there's that.",
 }
 
 const styles = StyleSheet.create({
