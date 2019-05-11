@@ -1,15 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react'
+import { Component } from 'react'
 import {
   View,
   FlatList,
   StyleSheet,
   Text,
 } from 'react-native';
-import { 
-  List, 
-  ListItem,
-  Avatar,
-} from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
@@ -38,9 +35,6 @@ class ListPage extends Component {
   renderLoading() {
     return(
       <View style={styles.container}>
-        <Image
-          source={require('../img/swords.png')}
-        />
         <Text>
           We are currently off fighting a war, so we can't load your data.
         </Text>
