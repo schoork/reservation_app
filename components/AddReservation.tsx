@@ -14,7 +14,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { ApolloProvider, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import ApolloClient from 'apollo-boost';
-import { withNavigation } from 'react-navigation'
+import { withNavigation, NavigationScreenProp } from 'react-navigation'
 
 const addReservation = gql`
   mutation addReservation($name: String!, $hotelName: String!, $arrivalDate: String!, $departureDate: String!) {
@@ -24,29 +24,45 @@ const addReservation = gql`
   }
 `
 
-/*
-const client = new ApolloClient({
-  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
-})
-*/
+interface Props {
+  navigation: NavigationScreenProp<any, any>
+}
 
-class AddReservationPage extends Component {
-  constructor(props) {
+interface State {
+  arrivalDate: Date,
+  departureDate: Date,
+  showArrivalDatePicker: boolean,
+  showDepartureDatePicker: boolean,
+  modalVisible: boolean,
+  errorModalVisible: boolean,
+  firstMessage: String,
+  secondMessage: String,
+  nameInput: String,
+  hotelNameInput: String,
+  errorMessage: String,
+}
+
+
+class AddReservationPage extends Component<Props, State> {
+  secondTextInput: any;
+  today: Date = new Date()
+  tomorrow: Date = new Date()
+  
+  constructor(props: Props) {
     super(props)
-    today = new Date()
-    tomorrow = new Date()
-    tomorrow.setDate(today.getDate()+1)
-    nameInput = ''
-    hotelNameInput = ''
+    this.tomorrow.setDate(this.today.getDate()+1)
     this.state = {
-      arrivalDate: today,
-      departureDate: tomorrow,
+      arrivalDate: this.today,
+      departureDate: this.tomorrow,
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
       modalVisible: false,
       errorModalVisible: false,
-      firstMessage: firstMessages.stark,
-      secondMessage: secondMessages.stark,
+      firstMessage: firstMessages[0],
+      secondMessage: secondMessages[0],
+      nameInput: '',
+      hotelNameInput: '',
+      errorMessage: '',
     }
     this._hideDatePickers = this._hideDatePickers.bind(this)
     this._submitReservation = this._submitReservation.bind(this)
@@ -60,7 +76,7 @@ class AddReservationPage extends Component {
     this._showDepartureDatePicker = this._showDepartureDatePicker.bind(this)
   }
 
-  _setArrivalDate(newDate) {
+  _setArrivalDate(newDate: Date) {
     this.setState({arrivalDate: newDate})
   }
 
@@ -77,7 +93,7 @@ class AddReservationPage extends Component {
     }
   }
 
-  _setDepartureDate(newDate) {
+  _setDepartureDate(newDate: Date) {
     this.setState({departureDate: newDate})
   }
   
@@ -118,23 +134,23 @@ class AddReservationPage extends Component {
   }
 
   _submitReservation() {
-    if (nameInput == '') {
+    if (this.state.nameInput == '') {
       this.setState({
         errorMessage: errorMessages.name,
         errorModalVisible: true,
       })
-    } else if (hotelNameInput == '' || hotelNameInput == null) {
+    } else if (this.state.hotelNameInput == '' || this.state.hotelNameInput == null) {
       this.setState({
         errorMessage: errorMessages.hotel,
         errorModalVisible: true,
       })
     } else {
-      index = 0
-      if (hotelNameInput.toUpperCase().includes('hilton'.toUpperCase()) === true) {
+      let index: number = 0
+      if (this.state.hotelNameInput.toUpperCase().includes('hilton'.toUpperCase()) === true) {
         index = 1
-      } else if (hotelNameInput.toUpperCase().includes('marriot'.toUpperCase()) === true) {
+      } else if (this.state.hotelNameInput.toUpperCase().includes('marriot'.toUpperCase()) === true) {
         index = 2
-      } else if (hotelNameInput.toUpperCase().includes('double'.toUpperCase()) === true) {
+      } else if (this.state.hotelNameInput.toUpperCase().includes('double'.toUpperCase()) === true) {
         index = 3
       }
       this.setState({
@@ -145,13 +161,13 @@ class AddReservationPage extends Component {
     }
   }
  
-  _setModalVisible(visible) {
+  _setModalVisible(visible: boolean) {
     this.setState({
       modalVisible: visible
     })
   }
 
-  _setErrorModalVisible(visible) {
+  _setErrorModalVisible(visible: boolean) {
     this.setState({
       errorModalVisible: visible
     })
@@ -165,15 +181,17 @@ class AddReservationPage extends Component {
       <ApolloProvider client={client}>
         <View style={styles.container}>
           <Mutation mutation={addReservation} refetchQueries={[{ query: reservationsQuery }]} >
-            {(addReservationMutation, {data}) => (
+            {(addReservationMutation: any, {data}: any) => (
               <View>
                 <TextInput
                   style={styles.singleLineTextInput}
                   editable={true}
                   placeholder={'Name'}
+                  value={this.state.nameInput.toString()}
                   onChangeText={(text) => {
-                    nameInput = text
-                    this.setState({text})
+                    this.setState({
+                      nameInput: text
+                    })
                   }}
                   autoCapitalize={'words'}
                   returnKeyType={'next'}
@@ -184,13 +202,17 @@ class AddReservationPage extends Component {
                   style={styles.singleLineTextInput}
                   editable={true}
                   placeholder={'Hotel'}
+                  value={this.state.hotelNameInput.toString()}
                   onChangeText={(text) => {
-                    hotelNameInput = text
-                    this.setState({text})
+                    this.setState({
+                      hotelNameInput: text
+                    })
                   }}
                   autoCapitalize={'words'}
                   returnKeyType={'done'}
-                  ref={(input) => {this.secondTextInput = input}}
+                  ref={(ref) => {
+                    this.secondTextInput = ref
+                  }}
                   onFocus={this._hideDatePickers}
                 />
       
@@ -225,10 +247,7 @@ class AddReservationPage extends Component {
                 <Modal
                   animationType={'slide'}
                   transparent={false}
-                  visible={this.state.modalVisible}
-                  onRequestClose={() =>{
-                    alert('modal closed')
-                  }}>
+                  visible={this.state.modalVisible}>
                   <View style={styles.container}>
                     <View style={{margin: 22}}>
                       <View style={styles.modalFlex}>
@@ -261,14 +280,14 @@ class AddReservationPage extends Component {
                             
                             addReservationMutation({
                               variables: {
-                                name: nameInput,
-                                hotelName: hotelNameInput,
+                                name: this.state.nameInput,
+                                hotelName: this.state.hotelNameInput,
                                 arrivalDate: this.state.arrivalDate.toDateString(),
                                 departureDate: this.state.departureDate.toDateString()
                               }
-                            }).then(res => {
+                            }).then((res: any) => {
                               this.props.navigation.goBack()
-                            }).catch(err => {
+                            }).catch((err: String) => {
                               <Text>err</Text>
                             })
                             
@@ -302,10 +321,7 @@ class AddReservationPage extends Component {
                 <Modal
                   animationType={'slide'}
                   transparent={false}
-                  visible={this.state.errorModalVisible}
-                  onRequestClose={() =>{
-                    alert('modal closed')
-                  }}>
+                  visible={this.state.errorModalVisible}>
                   <View style={styles.container}>
                     <View style={{margin: 22}}>
                       <View style={styles.modalFlex}>

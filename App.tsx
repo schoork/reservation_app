@@ -36,7 +36,7 @@ const reservationsQuery = gql`
 `
 
 class HomeScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({navigation}: any) => {
     return {
       headerTitle: 'Reservations',
       headerRight: (
@@ -45,6 +45,7 @@ class HomeScreen extends React.Component {
             navigation.navigate('Add', {
               client: client,
               reservationsQuery: reservationsQuery,
+              navigation: navigation,
             })
           }}
           name='add'
@@ -56,16 +57,16 @@ class HomeScreen extends React.Component {
   }
   render() {
     return(
-      <ApolloProvider client={client}>
-        <ListPage />
-      </ApolloProvider>
+      <ListPage />
     )
   }
 }
 
 class AddScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'Add Reservation',
+  static navigationOptions =  ({navigation}: any) => {
+    return {
+      headerTitle: 'Add Reservation',
+    }
   }
   render() {
     return (

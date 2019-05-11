@@ -1,16 +1,18 @@
-import React from 'react'
-import { Component } from 'react'
+import React, { Component } from 'react'
 import {
   View,
   FlatList,
   StyleSheet,
   Text,
+  Image,
 } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { graphql, Query, ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+import { any } from 'prop-types';
 
-const allReservationsQuery = gql`
+const RESERVATIONS_QUERY = gql`
   query {
     reservations(
       where: {name_not: ""},
@@ -24,37 +26,58 @@ const allReservationsQuery = gql`
   }
 `
 
-var imageSources = [
-  require('../img/stark.jpeg'),
-  require('../img/lannister.jpg'),
-  require('../img/dorne.png'),
-  require('../img/greyjoy.png')
-];
+const client = new ApolloClient({
+  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
+})
 
+// class ListPage extends React.Component<ChildProps<InputProps, Response>, {}> {
 class ListPage extends Component {
-  renderLoading() {
+
+  render() {
     return(
-      <View style={styles.container}>
-        <Text>
-          We are currently off fighting a war, so we can't load your data.
-        </Text>
-      </View>
+      <ApolloProvider client={client}>
+        <Query query={RESERVATIONS_QUERY}>
+          {({ loading, error, data }: any) => {
+            if (loading) return(
+              <View style={styles.loadingContainer}>
+                <Image
+                  style={styles.image}
+                  source={require('../img/swords.png')}
+                />
+                <Text style={styles.welcome}>
+                  We are currently off fighting a war, so we can't load your data.
+                </Text>
+              </View>
+            )
+            if (error) return(
+              <View style={styles.loadingContainer}>
+                <Image
+                  style={styles.image}
+                  source={require('../img/nightking.png')}
+                />
+                <Text style={styles.welcome}>
+                  I killed all your friends. And the people who were supposed to get you this data.
+                </Text>
+              </View>
+            )
+            return (
+              <FlatList
+                keyExtractor={this.keyExtractor}
+                data={data.reservations}
+                renderItem={this.renderItem}
+                ItemSeparatorComponent={this.renderSeparator}
+              />
+            )
+          }}
+        </Query>
+      </ApolloProvider>
     )
+    
   }
 
-  renderError() {
-    return(
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          An error occurred
-        </Text>
-      </View>
-    )
-  }
+  keyExtractor = (item: any, index: { toString: () => string; }) => index.toString()
 
-  keyExtractor = (item, index) => index.toString()
-
-  renderItem = ({item}) => (
+  renderItem = ({item}: any) => (
     <ListItem 
       key={item.id}
       title={`${item.name} staying at ${item.hotelName}`}
@@ -84,31 +107,14 @@ class ListPage extends Component {
       />
     )
   }
-
-  renderList(dataArray) {
-    return(
-      <FlatList
-        keyExtractor={this.keyExtractor}
-        data={dataArray}
-        renderItem={this.renderItem}
-        ItemSeparatorComponent={this.renderSeparator}
-      />
-    )
-  }
-
-  render() {
-    if (this.props.allReservationsQuery && this.props.allReservationsQuery.loading) {
-      return this.renderLoading;
-    } else if (this.props.allReservationsQuery && this.props.allReservationsQuery.error) {
-      return this.renderError;
-    } else if (this.props.allReservationsQuery.networkError) {
-      return this.renderLoading
-    } else {
-      const reservationsList = this.props.allReservationsQuery.reservations
-      return this.renderList(reservationsList)
-    }
-  }
 }
+
+var imageSources = [
+  require('../img/stark.jpeg'),
+  require('../img/lannister.jpg'),
+  require('../img/dorne.png'),
+  require('../img/greyjoy.png')
+];
 
 const styles = StyleSheet.create({
   container: {
@@ -116,6 +122,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    margin: 20,
   },
   welcome: {
     fontSize: 20,
@@ -127,6 +140,10 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  image: {
+    width: 200,
+    height: 200,
+  },
 })
 
-export default graphql (allReservationsQuery, {name: 'allReservationsQuery'} )(ListPage);
+export default ListPage;
