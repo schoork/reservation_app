@@ -11,6 +11,24 @@ import {
   Image
 } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { ApolloProvider, Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import ApolloClient from 'apollo-boost';
+import { withNavigation } from 'react-navigation'
+
+const addReservation = gql`
+  mutation addReservation($name: String!, $hotelName: String!, $arrivalDate: String!, $departureDate: String!) {
+    createReservation(data: {name: $name, hotelName: $hotelName, arrivalDate: $arrivalDate, departureDate: $departureDate}) {
+      id
+    }
+  }
+`
+
+/*
+const client = new ApolloClient({
+  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
+})
+*/
 
 class AddReservationPage extends Component {
   constructor(props) {
@@ -140,161 +158,186 @@ class AddReservationPage extends Component {
   }
 
   render() {
+    const client = this.props.navigation.getParam('client')
+
     return(
-      <View style={styles.container}>
-        <TextInput
-          style={styles.singleLineTextInput}
-          editable={true}
-          placeholder={'Name'}
-          onChangeText={(text) => {
-            nameInput = text
-            this.setState({text})
-          }}
-          autoCapitalize={'words'}
-          returnKeyType={'next'}
-          onSubmitEditing={() => { this.secondTextInput.focus() }}
-          onFocus={this._hideDatePickers}
-        />
-        <TextInput
-          style={styles.singleLineTextInput}
-          editable={true}
-          placeholder={'Hotel'}
-          onChangeText={(text) => {
-            hotelNameInput = text
-            this.setState({text})
-          }}
-          autoCapitalize={'words'}
-          returnKeyType={'done'}
-          ref={(input) => {this.secondTextInput = input}}
-          onFocus={this._hideDatePickers}
-        />
-
-        <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleArrivalDatePicker}>
-          <Text>
-            Arrival
-          </Text>
-          <Text style={styles.datePickerText} >
-            {this.state.arrivalDate.toDateString()}
-          </Text>
-        </TouchableWithoutFeedback>
-        {this._showArrivalDatePicker()}
-
-        <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleDepartureDatePicker}>
-          <Text>
-            Departure
-          </Text>
-          <Text style={styles.datePickerText}>
-            {this.state.departureDate.toDateString()}
-          </Text>
-        </TouchableWithoutFeedback>
-        {this._showDepartureDatePicker()}
-
-        <TouchableHighlight
-          onPress={this._submitReservation}
-          style={styles.highlightStyles}>
-          <Text style={styles.button}>
-            Complete Reservation
-          </Text>
-        </TouchableHighlight>
-
-        <Modal
-          animationType={'slide'}
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() =>{
-            alert('modal closed')
-          }}>
-          <View style={styles.container}>
-            <View style={{margin: 22}}>
-              <View style={styles.modalFlex}>
-                <Image
-                  style={styles.image}
-                  source={require('../img/tyrion.png')}
+      <ApolloProvider client={client}>
+        <View style={styles.container}>
+          <Mutation mutation={addReservation} >
+            {(addReservationMutation, {data}) => (
+              <View>
+                <TextInput
+                  style={styles.singleLineTextInput}
+                  editable={true}
+                  placeholder={'Name'}
+                  onChangeText={(text) => {
+                    nameInput = text
+                    this.setState({text})
+                  }}
+                  autoCapitalize={'words'}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() => { this.secondTextInput.focus() }}
+                  onFocus={this._hideDatePickers}
                 />
-                <Text style={styles.modalHeader}>
-                  Tyrion says:
-                </Text>
-              </View>
-
-              <Text style={styles.message}>
-                {this.state.firstMessage}
-              </Text>
-
-              <Text style={styles.message}>
-                [pauses for a sip of wine]
-              </Text>
-                
-              <Text style={styles.message}>
-                {this.state.secondMessage}
-              </Text>
-
-              <View style={styles.modalButtonFlex}>
-                <TouchableHighlight
-                  style={styles.modalButton}
-                  onPress={() => {
-                    this._setModalVisible(!this.state.modalVisible)
-                  }}>
-                  <Text>
-                    Yes
-                  </Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight
-                  style={styles.modalButton}
-                  onPress={() => {
-                    this._setModalVisible(!this.state.modalVisible)
-                  }}>
-                  <Text>
-                    No
-                  </Text>
-                </TouchableHighlight>
-              </View>
-              
-
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          animationType={'slide'}
-          transparent={false}
-          visible={this.state.errorModalVisible}
-          onRequestClose={() =>{
-            alert('modal closed')
-          }}>
-          <View style={styles.container}>
-            <View style={{margin: 22}}>
-              <View style={styles.modalFlex}>
-                <Image
-                  style={styles.image}
-                  source={require('../img/snow.png')}
+                <TextInput
+                  style={styles.singleLineTextInput}
+                  editable={true}
+                  placeholder={'Hotel'}
+                  onChangeText={(text) => {
+                    hotelNameInput = text
+                    this.setState({text})
+                  }}
+                  autoCapitalize={'words'}
+                  returnKeyType={'done'}
+                  ref={(input) => {this.secondTextInput = input}}
+                  onFocus={this._hideDatePickers}
                 />
-                <Text style={styles.modalHeader}>
-                  Jon says:
-                </Text>
-              </View>
-
-              <Text style={styles.message}>
-                {this.state.errorMessage}
-              </Text>
-
-              <View style={styles.modalButtonFlex}>
-                <TouchableHighlight
-                  style={styles.modalButton}
-                  onPress={() => {
-                    this._setErrorModalVisible(!this.state.errorModalVisible)
-                  }}>
+      
+                <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleArrivalDatePicker}>
                   <Text>
-                    Ok
+                    Arrival
+                  </Text>
+                  <Text style={styles.datePickerText} >
+                    {this.state.arrivalDate.toDateString()}
+                  </Text>
+                </TouchableWithoutFeedback>
+                {this._showArrivalDatePicker()}
+      
+                <TouchableWithoutFeedback style={styles.datePickerView} onPress={this._toggleDepartureDatePicker}>
+                  <Text>
+                    Departure
+                  </Text>
+                  <Text style={styles.datePickerText}>
+                    {this.state.departureDate.toDateString()}
+                  </Text>
+                </TouchableWithoutFeedback>
+                {this._showDepartureDatePicker()}
+      
+                <TouchableHighlight
+                  onPress={this._submitReservation}
+                  style={styles.highlightStyles}>
+                  <Text style={styles.button}>
+                    Complete Reservation
                   </Text>
                 </TouchableHighlight>
-                </View>
-
-            </View>
-          </View>
-        </Modal>
-
-      </View>
+      
+                <Modal
+                  animationType={'slide'}
+                  transparent={false}
+                  visible={this.state.modalVisible}
+                  onRequestClose={() =>{
+                    alert('modal closed')
+                  }}>
+                  <View style={styles.container}>
+                    <View style={{margin: 22}}>
+                      <View style={styles.modalFlex}>
+                        <Image
+                          style={styles.image}
+                          source={require('../img/tyrion.png')}
+                        />
+                        <Text style={styles.modalHeader}>
+                          Tyrion says:
+                        </Text>
+                      </View>
+      
+                      <Text style={styles.message}>
+                        {this.state.firstMessage}
+                      </Text>
+      
+                      <Text style={styles.message}>
+                        [pauses for a sip of wine]
+                      </Text>
+                        
+                      <Text style={styles.message}>
+                        {this.state.secondMessage}
+                      </Text>
+      
+                      <View style={styles.modalButtonFlex}>
+                        <TouchableHighlight
+                          style={styles.modalButton}
+                          onPress={() => {
+                            this._setModalVisible(!this.state.modalVisible)
+                            this.props.navigation.goBack()
+                            /*
+                            addReservationMutation({
+                              variables: {
+                                name: this.state.nameInput,
+                                hotelName: this.state.hotelNameInput,
+                                arrivalDate: this.state.arrivalDate,
+                                departureDate: this.state.departureDate
+                              }
+                            }).then(res => {
+                              this.props.navigation.goBack()
+                            }).catch(err => {
+                              <Text>err</Text>
+                            })
+                            */
+                          }}>
+                          <Text>
+                            Yes
+                          </Text>
+                        </TouchableHighlight>
+      
+                        <TouchableHighlight
+                          style={styles.modalButton}
+                          onPress={() => {
+                            this._setModalVisible(!this.state.modalVisible)
+                          }}>
+                          <Text>
+                            No
+                          </Text>
+                        </TouchableHighlight>
+                      </View>
+                      
+      
+                    </View>
+                  </View>
+                </Modal>
+      
+                <Modal
+                  animationType={'slide'}
+                  transparent={false}
+                  visible={this.state.errorModalVisible}
+                  onRequestClose={() =>{
+                    alert('modal closed')
+                  }}>
+                  <View style={styles.container}>
+                    <View style={{margin: 22}}>
+                      <View style={styles.modalFlex}>
+                        <Image
+                          style={styles.image}
+                          source={require('../img/snow.png')}
+                        />
+                        <Text style={styles.modalHeader}>
+                          Jon says:
+                        </Text>
+                      </View>
+      
+                      <Text style={styles.message}>
+                        {this.state.errorMessage}
+                      </Text>
+      
+                      <View style={styles.modalButtonFlex}>
+                        <TouchableHighlight
+                          style={styles.modalButton}
+                          onPress={() => {
+                            this._setErrorModalVisible(!this.state.errorModalVisible)
+                          }}>
+                          <Text>
+                            Ok
+                          </Text>
+                        </TouchableHighlight>
+                        </View>
+      
+                    </View>
+                  </View>
+                </Modal>
+              </View>
+            )}
+          </Mutation>
+        </View>
+      </ApolloProvider>
+      
     )
   }
 }
@@ -407,4 +450,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AddReservationPage;
+export default withNavigation(AddReservationPage);

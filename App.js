@@ -19,7 +19,6 @@ import AddReservationPage from './components/AddReservation';
 const client = new ApolloClient({
   uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
 })
-//const client = new ApolloClient({ networkInterface })
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -27,7 +26,11 @@ class HomeScreen extends React.Component {
       headerTitle: 'Reservations',
       headerRight: (
         <Icon
-          onPress={() => navigation.navigate('Add')}
+          onPress={() => {
+            navigation.navigate('Add', {
+              client: client,
+            })
+          }}
           name='add'
           type='material'
           color='white'
@@ -46,7 +49,7 @@ class HomeScreen extends React.Component {
 
 class AddScreen extends React.Component {
   static navigationOptions = {
-    headerTitle: 'Add Reservation'
+    headerTitle: 'Add Reservation',
   }
   render() {
     return (
