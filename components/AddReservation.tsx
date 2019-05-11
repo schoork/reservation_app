@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { 
   View, 
   TextInput, 
-  StyleSheet, 
   Text, 
   DatePickerIOS, 
   Keyboard, 
