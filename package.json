@@ -22,16 +22,34 @@
   "devDependencies": {
     "@babel/core": "7.4.4",
     "@babel/runtime": "7.4.4",
+    "@types/jest": "^24.0.12",
     "@types/react": "^16.8.17",
     "@types/react-native": "^0.57.55",
+    "@types/react-test-renderer": "^16.8.1",
     "babel-jest": "24.8.0",
     "jest": "24.8.0",
     "metro-react-native-babel-preset": "0.54.0",
     "react-native-typescript-transformer": "^1.2.12",
     "react-test-renderer": "16.8.3",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "cacheDirectory": ".jest/cache"
   }
 }
