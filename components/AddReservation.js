@@ -26,6 +26,7 @@ class AddReservationPage extends Component {
       showArrivalDatePicker: false,
       showDepartureDatePicker: false,
       modalVisible: false,
+      errorModalVisible: false,
       firstMessage: firstMessages.stark,
       secondMessage: secondMessages.stark,
     }
@@ -99,24 +100,42 @@ class AddReservationPage extends Component {
   }
 
   _submitReservation() {
-    index = 0
-    if (hotelNameInput.toUpperCase().includes('hilton'.toUpperCase()) === true) {
-      index = 1
-    } else if (hotelNameInput.toUpperCase().includes('marriot'.toUpperCase()) === true) {
-      index = 2
-    } else if (hotelNameInput.toUpperCase().includes('double'.toUpperCase()) === true) {
-      index = 3
+    if (nameInput == '') {
+      this.setState({
+        errorMessage: errorMessages.name,
+        errorModalVisible: true,
+      })
+    } else if (hotelNameInput == '') {
+      this.setState({
+        errorMessage: errorMessages.hotel,
+        errorModalVisible: true,
+      })
+    } else {
+      index = 0
+      if (hotelNameInput.toUpperCase().includes('hilton'.toUpperCase()) === true) {
+        index = 1
+      } else if (hotelNameInput.toUpperCase().includes('marriot'.toUpperCase()) === true) {
+        index = 2
+      } else if (hotelNameInput.toUpperCase().includes('double'.toUpperCase()) === true) {
+        index = 3
+      }
+      this.setState({
+        firstMessage: firstMessages[index],
+        secondMessage: secondMessages[index],
+        modalVisible: true
+      })
     }
-    this.setState({
-      firstMessage: firstMessages[index],
-      secondMessage: secondMessages[index],
-      modalVisible: true
-    })
   }
  
   _setModalVisible(visible) {
     this.setState({
       modalVisible: visible
+    })
+  }
+
+  _setErrorModalVisible(visible) {
+    this.setState({
+      errorModalVisible: visible
     })
   }
 
@@ -235,6 +254,46 @@ class AddReservationPage extends Component {
             </View>
           </View>
         </Modal>
+
+        <Modal
+          animationType={'slide'}
+          transparent={false}
+          visible={this.state.errorModalVisible}
+          onRequestClose={() =>{
+            alert('modal closed')
+          }}>
+          <View style={styles.container}>
+            <View style={{margin: 22}}>
+              <View style={styles.modalFlex}>
+                <Image
+                  style={styles.image}
+                  source={require('../img/snow.png')}
+                />
+                <Text style={styles.modalHeader}>
+                  Jon says:
+                </Text>
+              </View>
+
+              <Text style={styles.message}>
+                {this.state.errorMessage}
+              </Text>
+
+              <View style={styles.modalButtonFlex}>
+                <TouchableHighlight
+                  style={styles.modalButton}
+                  onPress={() => {
+                    this._setErrorModalVisible(!this.state.errorModalVisible)
+                  }}>
+                  <Text>
+                    Ok
+                  </Text>
+                </TouchableHighlight>
+                </View>
+
+            </View>
+          </View>
+        </Modal>
+
       </View>
     )
   }
@@ -253,6 +312,11 @@ const secondMessages = [
   "Don't kiss anyone though. For a house whose words are 'Unbowed, Unbent, Unbroken', they sure do lose a lot.",
   "The Greyjoys are the weirdest of the houses in Westeros. But apparently drowning isn't fatal. So, there's that.",
 ]
+
+const errorMessages = {
+  name: 'Go back beyond the wall, whitewalker. Otherwise, give us your name.',
+  hotel: "Sleeping outside is fine. I've done it a few times myself. But you don't need an app for it."
+}
 
 const styles = StyleSheet.create({
   container: {
