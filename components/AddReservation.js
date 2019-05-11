@@ -123,7 +123,7 @@ class AddReservationPage extends Component {
         errorMessage: errorMessages.name,
         errorModalVisible: true,
       })
-    } else if (hotelNameInput == '') {
+    } else if (hotelNameInput == '' || hotelNameInput == null) {
       this.setState({
         errorMessage: errorMessages.hotel,
         errorModalVisible: true,
@@ -256,22 +256,26 @@ class AddReservationPage extends Component {
                         <TouchableHighlight
                           style={styles.modalButton}
                           onPress={() => {
-                            this._setModalVisible(!this.state.modalVisible)
-                            this.props.navigation.goBack()
-                            /*
+                            
+                            
                             addReservationMutation({
                               variables: {
-                                name: this.state.nameInput,
-                                hotelName: this.state.hotelNameInput,
-                                arrivalDate: this.state.arrivalDate,
-                                departureDate: this.state.departureDate
+                                name: nameInput,
+                                hotelName: hotelNameInput,
+                                arrivalDate: this.state.arrivalDate.toDateString(),
+                                departureDate: this.state.departureDate.toDateString()
                               }
                             }).then(res => {
                               this.props.navigation.goBack()
                             }).catch(err => {
                               <Text>err</Text>
                             })
-                            */
+                            
+                            
+                            this._setModalVisible(!this.state.modalVisible)
+                            
+                            this.props.navigation.goBack()
+                            
                           }}>
                           <Text>
                             Yes
