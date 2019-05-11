@@ -12,17 +12,10 @@ import {
 } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { ApolloProvider, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import ApolloClient from 'apollo-boost';
 import { withNavigation, NavigationScreenProp } from 'react-navigation'
 
-const addReservation = gql`
-  mutation addReservation($name: String!, $hotelName: String!, $arrivalDate: String!, $departureDate: String!) {
-    createReservation(data: {name: $name, hotelName: $hotelName, arrivalDate: $arrivalDate, departureDate: $departureDate}) {
-      id
-    }
-  }
-`
+import { ADD_RESERVATION_QUERY, RESERVATIONS_QUERY, client } from './queries'
+import { styles } from './styles'
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -174,13 +167,11 @@ class AddReservationPage extends Component<Props, State> {
   }
 
   render() {
-    const client = this.props.navigation.getParam('client')
-    const reservationsQuery = this.props.navigation.getParam('reservationsQuery')
 
     return(
       <ApolloProvider client={client}>
-        <View style={styles.container}>
-          <Mutation mutation={addReservation} refetchQueries={[{ query: reservationsQuery }]} >
+        <View style={styles.addReservationContainer}>
+          <Mutation mutation={ADD_RESERVATION_QUERY} refetchQueries={[{ query: RESERVATIONS_QUERY }]} >
             {(addReservationMutation: any, {data}: any) => (
               <View>
                 <TextInput
@@ -248,7 +239,7 @@ class AddReservationPage extends Component<Props, State> {
                   animationType={'slide'}
                   transparent={false}
                   visible={this.state.modalVisible}>
-                  <View style={styles.container}>
+                  <View style={styles.addReservationContainer}>
                     <View style={{margin: 22}}>
                       <View style={styles.modalFlex}>
                         <Image
@@ -322,7 +313,7 @@ class AddReservationPage extends Component<Props, State> {
                   animationType={'slide'}
                   transparent={false}
                   visible={this.state.errorModalVisible}>
-                  <View style={styles.container}>
+                  <View style={styles.addReservationContainer}>
                     <View style={{margin: 22}}>
                       <View style={styles.modalFlex}>
                         <Image
@@ -381,94 +372,5 @@ const errorMessages = {
   name: 'Go back beyond the wall, whitewalker. Otherwise, give us your name.',
   hotel: "Sleeping outside is fine. I've done it a few times myself. But you don't need an app for it."
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 50,
-    backgroundColor: '#2F4F4F',
-  },
-  singleLineTextInput: {
-    height: 40,
-    backgroundColor: '#F5FCFF',
-    width: '84%',
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginLeft: '8%',
-    marginTop: 5,
-    marginBottom: 5,
-    borderRadius: 25,
-  },
-  datePickerView: {
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F5FCFF',
-    width: '84%',
-    marginLeft: '8%',
-    marginTop: 5,
-    marginBottom: 5,
-    borderRadius: 25,
-  },
-  datePickerText: {
-    
-  },
-  datePicker: {
-    width: '84%',
-    marginLeft: '8%',
-    backgroundColor: '#F5FCFF',
-  },
-  button: {
-    borderRadius: 25,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    fontSize: 18,
-    padding: 10,
-  },
-  highlightStyles: {
-    marginTop: 10,
-    alignItems: 'center',
-    backgroundColor: "#F5FCFF",
-    width: '84%',
-    marginLeft: '8%',
-    justifyContent: 'center',
-    borderRadius: 25,
-  },
-  modalFlex: {
-    flex: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  modalHeader: {
-    color: '#F5FCFF',
-    margin: 20,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  image: {
-    width: 100,
-    height: 100,
-  },
-  message: {
-    color: '#F5FCFF',
-    marginTop: 20,
-  },
-  modalButtonFlex: {
-    marginTop: 40,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalButton: {
-    backgroundColor: '#F5FCFF',
-    margin: 10,
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-})
 
 export default withNavigation(AddReservationPage);

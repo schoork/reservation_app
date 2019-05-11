@@ -2,38 +2,19 @@ import React, { Component } from 'react'
 import {
   View,
   FlatList,
-  StyleSheet,
   Text,
   Image,
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import gql from 'graphql-tag';
-import { graphql, Query, ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
-import { any } from 'prop-types';
+import { Query, ApolloProvider } from 'react-apollo';
 
-const RESERVATIONS_QUERY = gql`
-  query {
-    reservations(
-      where: {name_not: ""},
-      orderBy: createdAt_DESC) {
-        id
-        name
-        hotelName
-        departureDate
-        arrivalDate
-    }
-  }
-`
+import { client, RESERVATIONS_QUERY } from './queries'
+import { styles } from './styles'
 
-const client = new ApolloClient({
-  uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
-})
-
-// class ListPage extends React.Component<ChildProps<InputProps, Response>, {}> {
 class ListPage extends Component {
 
   render() {
+
     return(
       <ApolloProvider client={client}>
         <Query query={RESERVATIONS_QUERY}>
@@ -41,7 +22,7 @@ class ListPage extends Component {
             if (loading) return(
               <View style={styles.loadingContainer}>
                 <Image
-                  style={styles.image}
+                  style={styles.listPageImage}
                   source={require('../img/swords.png')}
                 />
                 <Text style={styles.welcome}>
@@ -52,7 +33,7 @@ class ListPage extends Component {
             if (error) return(
               <View style={styles.loadingContainer}>
                 <Image
-                  style={styles.image}
+                  style={styles.listPageImage}
                   source={require('../img/nightking.png')}
                 />
                 <Text style={styles.welcome}>
@@ -115,35 +96,5 @@ var imageSources = [
   require('../img/dorne.png'),
   require('../img/greyjoy.png')
 ];
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    margin: 20,
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-})
 
 export default ListPage;
