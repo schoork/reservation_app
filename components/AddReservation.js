@@ -177,18 +177,40 @@ class AddReservationPage extends Component {
                 </Text>
               </View>
 
-              <Text>
-                {}
+              <Text style={styles.message}>
+                {firstMessages.stark}
               </Text>
 
-              <TouchableHighlight
-                onPress={() => {
-                  this._setModalVisible(!this.state.modalVisible)
-                }}>
-                <Text>
-                  Hide
-                </Text>
-              </TouchableHighlight>
+              <Text style={styles.message}>
+                [pauses for a sip of wine]
+              </Text>
+                
+              <Text style={styles.message}>
+                {secondMessages.stark}
+              </Text>
+
+              <View style={styles.modalButtonFlex}>
+                <TouchableHighlight
+                  style={styles.modalButton}
+                  onPress={() => {
+                    this._setModalVisible(!this.state.modalVisible)
+                  }}>
+                  <Text>
+                    Yes
+                  </Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                  style={styles.modalButton}
+                  onPress={() => {
+                    this._setModalVisible(!this.state.modalVisible)
+                  }}>
+                  <Text>
+                    No
+                  </Text>
+                </TouchableHighlight>
+              </View>
+              
 
             </View>
           </View>
@@ -196,6 +218,14 @@ class AddReservationPage extends Component {
       </View>
     )
   }
+}
+
+const firstMessages = {
+  stark: "The Starks are noble and just lords. They will give you a fair shake. But if you're the kind who would desert from the Wall, they will chop off your head.",
+}
+
+const secondMessages = {
+  stark: "The Starks also tend to die a lot, and the Boltons are downright cruel. Are you sure you want to stay so far north? Winter is coming.",
 }
 
 const styles = StyleSheet.create({
@@ -264,6 +294,26 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
+  },
+  message: {
+    color: '#F5FCFF',
+    marginTop: 20,
+  },
+  modalButtonFlex: {
+    marginTop: 40,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalButton: {
+    backgroundColor: '#F5FCFF',
+    margin: 10,
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })
 
