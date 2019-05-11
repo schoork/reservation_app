@@ -1,5 +1,15 @@
 import React, { Component } from 'react'
-import { View, TextInput, StyleSheet, Text, DatePickerIOS, Keyboard, Modal, TouchableHighlight } from 'react-native'
+import { 
+  View, 
+  TextInput, 
+  StyleSheet, 
+  Text, 
+  DatePickerIOS, 
+  Keyboard, 
+  Modal, 
+  TouchableHighlight,
+  Image
+} from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class AddReservationPage extends Component {
@@ -155,10 +165,20 @@ class AddReservationPage extends Component {
           onRequestClose={() =>{
             alert('modal closed')
           }}>
-          <View style={{marginTop: 22}}>
-            <View>
+          <View style={styles.container}>
+            <View style={{margin: 22}}>
+              <View style={styles.modalFlex}>
+                <Image
+                  style={styles.image}
+                  source={require('../img/tyrion.png')}
+                />
+                <Text style={styles.modalHeader}>
+                  Tyrion says:
+                </Text>
+              </View>
+
               <Text>
-                Tyrion says:
+                {}
               </Text>
 
               <TouchableHighlight
@@ -188,7 +208,8 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#F5FCFF',
     width: '84%',
-    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
     marginLeft: '8%',
     marginTop: 5,
     marginBottom: 5,
@@ -228,6 +249,21 @@ const styles = StyleSheet.create({
     marginLeft: '8%',
     justifyContent: 'center',
     borderRadius: 25,
+  },
+  modalFlex: {
+    flex: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modalHeader: {
+    color: '#F5FCFF',
+    margin: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 100,
+    height: 100,
   }
 })
 
