@@ -7,8 +7,7 @@
  */
 
 import React from 'react'
-import { Component } from 'react'
-import {View, Text, StyleSheet} from 'react-native' 
+import { StyleSheet } from 'react-native' 
 import { Icon } from 'react-native-elements'
 import {createStackNavigator, createAppContainer} from 'react-navigation'
 import ApolloClient from 'apollo-boost';
