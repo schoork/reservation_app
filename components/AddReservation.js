@@ -159,11 +159,12 @@ class AddReservationPage extends Component {
 
   render() {
     const client = this.props.navigation.getParam('client')
+    const reservationsQuery = this.props.navigation.getParam('reservationsQuery')
 
     return(
       <ApolloProvider client={client}>
         <View style={styles.container}>
-          <Mutation mutation={addReservation} >
+          <Mutation mutation={addReservation} refetchQueries={[{ query: reservationsQuery }]} >
             {(addReservationMutation, {data}) => (
               <View>
                 <TextInput

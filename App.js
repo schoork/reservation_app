@@ -12,6 +12,7 @@ import { Icon } from 'react-native-elements'
 import {createStackNavigator, createAppContainer} from 'react-navigation'
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import gql from 'graphql-tag';
 
 import ListPage from './components/ListPage';
 import AddReservationPage from './components/AddReservation';
@@ -19,6 +20,20 @@ import AddReservationPage from './components/AddReservation';
 const client = new ApolloClient({
   uri: 'https://us1.prisma.sh/public-luckox-377/reservation-graphql-backend/dev'
 })
+
+const reservationsQuery = gql`
+  query {
+    reservations(
+      where: {name_not: ""},
+      orderBy: createdAt_DESC) {
+        id
+        name
+        hotelName
+        departureDate
+        arrivalDate
+    }
+  }
+`
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -29,6 +44,7 @@ class HomeScreen extends React.Component {
           onPress={() => {
             navigation.navigate('Add', {
               client: client,
+              reservationsQuery: reservationsQuery,
             })
           }}
           name='add'
